@@ -1,0 +1,48 @@
+unit WebModule;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, Web.HTTPApp, Datasnap.DSHTTPCommon,
+  Datasnap.DSHTTPWebBroker, Datasnap.DSServer,
+  Web.WebFileDispatcher, Web.HTTPProd,
+  DataSnap.DSAuth,
+  Datasnap.DSProxyJavaScript, IPPeerServer, Datasnap.DSMetadata, Datasnap.DSServerMetadata, Datasnap.DSClientMetadata, Datasnap.DSCommonServer, Datasnap.DSHTTP;
+
+type
+  TWebModule1 = class(TWebModule)
+    DSHTTPWebDispatcher1: TDSHTTPWebDispatcher;
+    procedure WebModuleDefaultAction(Sender: TObject;
+      Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  WebModuleClass: TComponentClass = TWebModule1;
+
+implementation
+
+
+{$R *.dfm}
+
+uses ServerController, ServerContainer, Web.WebReq;
+
+procedure TWebModule1.WebModuleDefaultAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+var
+  ServerCtrl: TServerController1;
+begin
+  ServerCtrl := TServerController1.Create(nil);
+  try
+    Response.Content := ServerCtrl.GetAppName;
+    Handled := True;
+  finally
+    ServerCtrl.Free;
+  end;
+end;
+
+end.
+
