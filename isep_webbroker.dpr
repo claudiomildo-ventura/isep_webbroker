@@ -8,8 +8,10 @@ uses
   Web.WebReq,
   IdHTTPWebBrokerBridge,
   Startup in 'Startup.pas' {Form1},
-  ServerController in 'ServerController.pas',
-  ServerContainer in 'ServerContainer.pas' {ServerContainer1: TDataModule},
+  ArchetypeController in 'adapters\in\datasnap\ArchetypeController.pas',
+  AppInfo in 'domain\entities\AppInfo.pas',
+  GetAppName in 'domain\usecases\GetAppName.pas',
+  GetAppNameService in 'application\services\GetAppNameService.pas',
   WebModule in 'WebModule.pas' {WebModule1: TWebModule};
 
 {$R *.res}

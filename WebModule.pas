@@ -28,19 +28,19 @@ implementation
 
 {$R *.dfm}
 
-uses ServerController, ServerContainer, Web.WebReq;
+uses ArchetypeController, ServerContainer, Web.WebReq;
 
 procedure TWebModule1.WebModuleDefaultAction(Sender: TObject;
   Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
 var
-  ServerCtrl: TServerController1;
+  Controller: TArchetypeController;
 begin
-  ServerCtrl := TServerController1.Create(nil);
+  Controller := TArchetypeController.Create(nil);
   try
-    Response.Content := ServerCtrl.GetAppName;
+    Response.Content := Controller.ArchetypeMethod;
     Handled := True;
   finally
-    ServerCtrl.Free;
+    Controller.Free;
   end;
 end;
 
