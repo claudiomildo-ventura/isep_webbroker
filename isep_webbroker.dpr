@@ -1,7 +1,7 @@
 program isep_webbroker;
 {$APPTYPE GUI}
 
-{$R *.dres}
+
 
 uses
   Vcl.Forms,
