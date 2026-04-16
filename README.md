@@ -4,6 +4,8 @@
 
 This project is a Delphi WebBroker application organized with a clean-architecture-inspired structure. HTTP requests enter through the WebBroker module, are dispatched by a router, handled by controllers in the adapter layer, and delegated to application use cases and services.
 
+The previous legacy Archetype entity/service chain has been removed from the active project structure. The current implementation is centered on the `/generate` use case.
+
 ## Architecture Flow
 
 The current request flow is:
@@ -32,8 +34,8 @@ Main example:
 - `adapters/in/web/Controllers/`: inbound web controllers.
 - `application/services/`: application service implementations.
 - `domain/usecases/`: use case contracts.
-- `domain/interfaces/`: legacy interfaces kept during migration.
-- `domain/entities/`: legacy entities kept during migration.
+
+Only actively used units are kept in the project tree.
 
 ## Key Units
 
