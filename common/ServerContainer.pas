@@ -2,9 +2,11 @@ unit ServerContainer;
 
 interface
 
-uses System.SysUtils, System.Classes,
-  Datasnap.DSServer, Datasnap.DSCommonServer,
-  Datasnap.DSAuth;
+uses System.SysUtils,
+     System.Classes,
+     Datasnap.DSServer,
+     Datasnap.DSCommonServer,
+     Datasnap.DSAuth;
 
 type
   TServerContainer1 = class(TDataModule)
@@ -23,10 +25,9 @@ function DSServer: TDSServer;
 
 implementation
 
-
 {$R *.dfm}
 
-uses Winapi.Windows, ServerController;
+uses Winapi.Windows;
 
 var
   FModule: TComponent;
@@ -52,13 +53,11 @@ end;
 procedure TServerContainer1.DSServerClass1GetClass(
   DSServerClass: TDSServerClass; var PersistentClass: TPersistentClass);
 begin
-  PersistentClass := ServerController.TServerController1;
+  PersistentClass := TComponent;
 end;
-
 
 initialization
   FModule := TServerContainer1.Create(nil);
 finalization
   FModule.Free;
 end.
-
