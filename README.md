@@ -1,30 +1,72 @@
 # ISEP | Integrated Software Engineering Platform - WebBroker
 
----
+## Project Overview
 
-## 🧩 Project Overview
+This project is a Delphi WebBroker application organized with a clean-architecture-inspired structure. HTTP requests enter through the WebBroker module, are dispatched by a router, handled by controllers in the adapter layer, and delegated to application use cases and services.
 
-This application is a modernization of a legacy system originally developed in Object Pascal (Delphi XE10), now structured as a WebBroker-based API service. The project aims to provide a robust, maintainable, and scalable backend solution, leveraging the strengths of Delphi for web server development.
+## Architecture Flow
 
-## 📁 Project Structure
+The current request flow is:
 
-- `isep_webbroker.dpr` / `.dproj`: Delphi project files.
-- `ServerContainer.pas` / `.dfm`: Server container logic and design.
-- `ServerController.pas`: Implementation of the main API endpoint.
-- `WebModule.pas` / `.dfm`: Web module configuration and routing.
-- `Startup.pas` / `.dfm`: Application startup logic.
-- `isep_webbroker.stat`: File for tracking editor and compile times.
+HTTP Request
+-> WebModule
+-> Router
+-> Controller
+-> Use Case
+-> Application Service
 
-## 🚀 Getting Started
+Main example:
 
-1. **Requirements**:
-   - Delphi XE10 or compatible IDE
-   - Windows OS
+- `GET /generate` is handled by the WebModule.
+- The WebModule delegates routing to `TAppRouter`.
+- `TAppRouter` dispatches `/generate` to `TArchetypeController`.
+- `TArchetypeController` delegates to `IGenerateSolutionUseCase`.
+- `TGenerateSolutionService` returns the JSON response.
 
-2. **Build & Run**:
-   - Open the `.dpr` project in Delphi.
-   - Build and run the application.
-   - Access the API via the configured port. The root endpoint (`/`) returns the application name.
+## Project Structure
 
-3. **Development**:
-   - Modify `.pas` and `.dfm` files for business logic and configuration changes.
+- `isep_webbroker.dpr` / `isep_webbroker.dproj`: project entry and Delphi build configuration.
+- `common/`: startup and shared infrastructure modules.
+- `adapters/in/web/WebModule/`: WebBroker entry module.
+- `adapters/in/web/Router/`: HTTP route dispatching.
+- `adapters/in/web/Controllers/`: inbound web controllers.
+- `application/services/`: application service implementations.
+- `domain/usecases/`: use case contracts.
+- `domain/interfaces/`: legacy interfaces kept during migration.
+- `domain/entities/`: legacy entities kept during migration.
+
+## Key Units
+
+- `common/Startup.pas`: GUI bootstrap used to start and stop the local HTTP server.
+- `common/ServerContainer.pas`: shared DataSnap server container module.
+- `adapters/in/web/WebModule/WebModule1.pas`: WebBroker module that handles incoming requests.
+- `adapters/in/web/Router/AppRouter.pas`: router responsible for route matching and HTTP status handling.
+- `adapters/in/web/Controllers/ArchetypeController.pas`: controller for the `/generate` endpoint.
+- `domain/usecases/GenerateSolutionUseCase.pas`: use case interface definition.
+- `application/services/GenerateSolutionService.pas`: use case implementation returning JSON.
+
+## Endpoint
+
+- `GET /generate`
+  Returns:
+  `{"message":"solution generated"}`
+
+For unsupported methods on `/generate`, the router returns `405 Method Not Allowed`.
+For unknown routes, the router returns `404` with a JSON error payload.
+
+## Getting Started
+
+1. Requirements:
+   - Delphi XE10 or a compatible Delphi IDE
+   - Windows
+
+2. Run locally:
+   - Open `isep_webbroker.dpr` in Delphi.
+   - Build and run the project.
+   - Use the startup form to choose a port and start the server.
+   - Call `http://localhost:3003/generate` or use the configured port.
+
+3. Development notes:
+   - Keep WebModule focused on HTTP input/output concerns.
+   - Put route selection in the router layer.
+   - Keep controllers thin and delegate business logic to use cases and services.
