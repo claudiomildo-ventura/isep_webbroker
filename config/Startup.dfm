@@ -1,7 +1,7 @@
-object Form1: TForm1
+object Startup: TStartup
   Left = 271
   Top = 114
-  Caption = 'Form1'
+  Caption = 'Startup'
   ClientHeight = 235
   ClientWidth = 399
   Color = clBtnFace
@@ -11,6 +11,7 @@ object Form1: TForm1
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  Position = poScreenCenter
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13

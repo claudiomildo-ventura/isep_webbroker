@@ -2,9 +2,11 @@ unit ServerContainer;
 
 interface
 
-uses System.SysUtils, System.Classes,
-  Datasnap.DSServer, Datasnap.DSCommonServer,
-  Datasnap.DSAuth;
+uses System.SysUtils,
+     System.Classes,
+     Datasnap.DSServer,
+     Datasnap.DSCommonServer,
+     Datasnap.DSAuth;
 
 type
   TServerContainer1 = class(TDataModule)
@@ -22,7 +24,6 @@ type
 function DSServer: TDSServer;
 
 implementation
-
 
 {$R *.dfm}
 
@@ -55,10 +56,8 @@ begin
   PersistentClass := ArchetypeController.TArchetypeController;
 end;
 
-
 initialization
   FModule := TServerContainer1.Create(nil);
 finalization
   FModule.Free;
 end.
-

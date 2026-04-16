@@ -4,15 +4,15 @@ program isep_webbroker;
 
 
 uses
-  Vcl.Forms,
-  Web.WebReq,
-  IdHTTPWebBrokerBridge,
-  Startup in 'Startup.pas' {Form1},
-  ArchetypeController in 'adapters\in\datasnap\ArchetypeController.pas',
-  AppInfo in 'domain\entities\AppInfo.pas',
-  GetAppName in 'domain\usecases\GetAppName.pas',
-  GetAppNameService in 'application\services\GetAppNameService.pas',
-  WebModule in 'WebModule.pas' {WebModule1: TWebModule};
+  Vcl.Forms, { Delphi VCL forms framework }
+  Web.WebReq, { WebBroker request handler }
+  IdHTTPWebBrokerBridge, { Indy HTTP bridge for WebBroker }
+  Startup in 'config\\Startup.pas' {Startup1: TStartup}, { Main application form }
+  ArchetypeController in 'adapters\in\archetype\ArchetypeController.pas', { Main controller for archetype logic }
+  Archetype in 'domain\entities\Archetype.pas', { Domain entity for archetype }
+  IArchetypeService in 'domain\interfaces\IArchetypeService.pas', { Interface for archetype service }
+  ArchetypeService in 'application\services\ArchetypeService.pas', { Implementation of archetype service }
+  WebModule1 in 'config\\WebModule1.pas' {WebModule1: TWebModule1}; { Main web module for HTTP requests }
 
 {$R *.res}
 
@@ -20,6 +20,6 @@ begin
   if WebRequestHandler <> nil then
     WebRequestHandler.WebModuleClass := WebModuleClass;
   Application.Initialize;
-  Application.CreateForm(TForm1, Form1);
+  Application.CreateForm(TStartup, Startup1);
   Application.Run;
 end.

@@ -1,14 +1,36 @@
+// -----------------------------------------------------------------------------
+// Startup.pas
+//
+// This unit defines TStartup, the main form for the WebBroker application.
+// It provides a GUI for starting/stopping the HTTP server and opening the
+// browser to interact with the web server. It manages the server lifecycle
+// and user interactions at application startup.
+//
+// Configuration:
+// - Instantiated at application startup by isep_webbroker.dpr.
+// - Manages TIdHTTPWebBrokerBridge for HTTP server operations.
+// - Provides UI controls for server management and browser launch.
+// -----------------------------------------------------------------------------
 unit Startup;
 
 interface
 
 uses
-  Winapi.Messages, System.SysUtils, System.Variants,
-  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
-  Vcl.AppEvnts, Vcl.StdCtrls, IdHTTPWebBrokerBridge, Web.HTTPApp;
+  Winapi.Messages,
+  System.SysUtils,
+  System.Variants,
+  System.Classes,
+  Vcl.Graphics,
+  Vcl.Controls,
+  Vcl.Forms,
+  Vcl.Dialogs,
+  Vcl.AppEvnts,
+  Vcl.StdCtrls,
+  IdHTTPWebBrokerBridge,
+  Web.HTTPApp;
 
 type
-  TForm1 = class(TForm)
+  TStartup = class(TForm)
     ButtonStart: TButton;
     ButtonStop: TButton;
     EditPort: TEdit;
@@ -29,34 +51,32 @@ type
   end;
 
 var
-  Form1: TForm1;
+  Startup1: TStartup;
 
 implementation
 
 {$R *.dfm}
 
 uses
-  WinApi.Windows, Winapi.ShellApi, Datasnap.DSSession;
+  Winapi.Windows, Winapi.ShellApi, Datasnap.DSSession;
 
-procedure TForm1.ApplicationEvents1Idle(Sender: TObject; var Done: Boolean);
+procedure TStartup.ApplicationEvents1Idle(Sender: TObject; var Done: Boolean);
 begin
   ButtonStart.Enabled := not FServer.Active;
   ButtonStop.Enabled := FServer.Active;
   EditPort.Enabled := not FServer.Active;
 end;
 
-procedure TForm1.ButtonOpenBrowserClick(Sender: TObject);
+procedure TStartup.ButtonOpenBrowserClick(Sender: TObject);
 var
   LURL: string;
 begin
   StartServer;
   LURL := Format('http://localhost:%s', [EditPort.Text]);
-  ShellExecute(0,
-        nil,
-        PChar(LURL), nil, nil, SW_SHOWNOACTIVATE);
+  ShellExecute(0, nil, PChar(LURL), nil, nil, SW_SHOWNOACTIVATE);
 end;
 
-procedure TForm1.ButtonStartClick(Sender: TObject);
+procedure TStartup.ButtonStartClick(Sender: TObject);
 begin
   StartServer;
 end;
@@ -67,19 +87,19 @@ begin
     TDSSessionManager.Instance.TerminateAllSessions;
 end;
 
-procedure TForm1.ButtonStopClick(Sender: TObject);
+procedure TStartup.ButtonStopClick(Sender: TObject);
 begin
   TerminateThreads;
   FServer.Active := False;
   FServer.Bindings.Clear;
 end;
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TStartup.FormCreate(Sender: TObject);
 begin
   FServer := TIdHTTPWebBrokerBridge.Create(Self);
 end;
 
-procedure TForm1.StartServer;
+procedure TStartup.StartServer;
 begin
   if not FServer.Active then
   begin
