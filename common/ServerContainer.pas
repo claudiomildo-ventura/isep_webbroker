@@ -27,7 +27,7 @@ implementation
 
 {$R *.dfm}
 
-uses Winapi.Windows, ArchetypeController;
+uses Winapi.Windows;
 
 var
   FModule: TComponent;
@@ -53,7 +53,7 @@ end;
 procedure TServerContainer1.DSServerClass1GetClass(
   DSServerClass: TDSServerClass; var PersistentClass: TPersistentClass);
 begin
-  PersistentClass := ArchetypeController.TArchetypeController;
+  PersistentClass := TComponent;
 end;
 
 initialization
