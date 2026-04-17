@@ -15,11 +15,15 @@ unit ArchetypeController;
 interface
 
 uses
+  IArchetypeController,
   GenerateSolutionUseCase;
 
-type
-  TArchetypeController = class
+  type
+  TArchetypeController = class(TInterfacedObject, IArchetypeControllerSpecification)
+  private
+    FUseCase: IGenerateSolutionUseCase;
   public
+    constructor Create(const AUseCase: IGenerateSolutionUseCase);
     function GenerateSolution: string;
   end;
 
@@ -28,12 +32,16 @@ implementation
 uses
   GenerateSolutionService;
 
-function TArchetypeController.GenerateSolution: string;
-var
-  UseCase: IGenerateSolutionUseCase;
+
+constructor TArchetypeController.Create(const AUseCase: IGenerateSolutionUseCase);
 begin
-  UseCase := TGenerateSolutionService.Create;
-  Result := UseCase.Execute;
+  inherited Create;
+  FUseCase := AUseCase;
+end;
+
+function TArchetypeController.GenerateSolution: string;
+begin
+  Result := FUseCase.Execute;
 end;
 
 end.

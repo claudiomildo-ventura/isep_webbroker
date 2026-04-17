@@ -6,26 +6,32 @@ uses
   System.SysUtils,
   System.StrUtils,
   System.JSON,
-  Web.HTTPApp;
+  Web.HTTPApp,
+  GenerateSolutionUseCase;
 
 type
   TAppRouter = class
   private
+    FUseCase: IGenerateSolutionUseCase;
     function NormalizePath(const APath: string): string;
     function JsonError(const AMessage: string): string;
     function JsonMethodNotAllowed(const AAllowedMethod: string): string;
   public
-    function Route(
-      Request: TWebRequest;
-      out StatusCode: Integer;
-      out ContentType: string
-    ): string;
+    constructor Create(const AUseCase: IGenerateSolutionUseCase);
+    function Route(Request: TWebRequest; out StatusCode: Integer; out ContentType: string): string;
   end;
 
 implementation
 
-uses
-  ArchetypeController;
+constructor TAppRouter.Create(const AUseCase: IGenerateSolutionUseCase);
+begin
+  inherited Create;
+
+  if not Assigned(AUseCase) then
+    raise Exception.Create('IGenerateSolutionUseCase not assigned');
+
+  FUseCase := AUseCase;
+end;
 
 function TAppRouter.NormalizePath(const APath: string): string;
 begin
@@ -65,13 +71,8 @@ begin
   end;
 end;
 
-function TAppRouter.Route(
-  Request: TWebRequest;
-  out StatusCode: Integer;
-  out ContentType: string
-): string;
+function TAppRouter.Route(Request: TWebRequest; out StatusCode: Integer; out ContentType: string): string;
 var
-  Controller: TArchetypeController;
   Path: string;
 begin
   ContentType := 'application/json; charset=utf-8';
@@ -86,14 +87,7 @@ begin
       Exit(JsonMethodNotAllowed('GET'));
     end;
 
-    Controller := TArchetypeController.Create;
-    try
-      Result := Controller.GenerateSolution;
-    finally
-      Controller.Free;
-    end;
-
-    Exit;
+    Exit(FUseCase.Execute);
   end;
 
   StatusCode := 404;
@@ -101,4 +95,3 @@ begin
 end;
 
 end.
-
