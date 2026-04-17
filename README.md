@@ -30,7 +30,7 @@ Main example:
 - `isep_webbroker.dpr` / `isep_webbroker.dproj`: project entry and Delphi build configuration.
 - `common/`: startup and shared infrastructure modules.
 - `infrastructure/config/`: WebBroker entry module and route dispatching.
-- `adapter/in/archetype/Controllers/`: inbound web controllers.
+- `adapter/in/archetype/controller/`: inbound web controllers.
 - `domain/service/`: service implementations.
 - `port/input/`: input contracts.
 
@@ -42,7 +42,7 @@ Only actively used units are kept in the project tree.
 - `infrastructure/config/server/ServerContainer.pas`: shared DataSnap server container module.
 - `infrastructure/config/webmodule/WebModule1.pas`: WebBroker module that handles incoming requests.
 - `infrastructure/config/router/AppRouter.pas`: router responsible for route matching and HTTP status handling.
-- `adapter/in/archetype/Controllers/ArchetypeController.pas`: controller for the `/generate` endpoint.
+- `adapter/in/archetype/controller/ArchetypeController.pas`: controller for the `/generate` endpoint.
 - `port/input/ArchetypeServicePort.pas`: archetype service contract.
 - `port/output/ArchetypeControllerPort.pas`: archetype controller contract.
 - `domain/service/ArchetypeService.pas`: archetype service implementation.

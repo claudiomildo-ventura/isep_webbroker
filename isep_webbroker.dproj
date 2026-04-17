@@ -11,7 +11,7 @@
         <AppType>Application</AppType>
     </PropertyGroup>
     <PropertyGroup>
-        <DCC_UnitSearchPath>adapter\in\archetype\Controllers;domain\entities;port\input;port\output;infrastructure\config;infrastructure\config\router;infrastructure\config\webmodule;infrastructure\config\server;infrastructure\config\startup;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <DCC_UnitSearchPath>adapter\in\archetype\controller;adapter\in\archetype\controller\dto;domain\entities;port\input;port\output;infrastructure\config;infrastructure\config\router;infrastructure\config\webmodule;infrastructure\config\server;infrastructure\config\startup;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
         <Base>true</Base>
@@ -112,7 +112,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
             <DesignClass>TServerContainer1</DesignClass>
         </DCCReference>
         <DCCReference Include="infrastructure\config\router\AppRouter.pas"/>
-        <DCCReference Include="adapter\in\archetype\Controllers\ArchetypeController.pas"/>
+        <DCCReference Include="adapter\in\archetype\controller\ArchetypeController.pas"/>
         <DCCReference Include="domain\entities\Archetype.pas"/>
         <DCCReference Include="domain\service\ArchetypeService.pas"/>
         <DCCReference Include="port\input\ArchetypeServicePort.pas"/>
