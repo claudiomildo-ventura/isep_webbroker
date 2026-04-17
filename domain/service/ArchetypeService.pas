@@ -3,10 +3,10 @@ unit ArchetypeService;
 interface
 
 uses
-  System.SysUtils, System.Classes, IArchetypeService, Archetype;
+  System.SysUtils, System.Classes, ArchetypeServicePort, Archetype;
 
 type
-  TArchetypeService = class(TInterfacedObject, TIArchetypeService)
+  TArchetypeService = class(TInterfacedObject, IArchetypeService)
   private
     { Private declarations }
   protected

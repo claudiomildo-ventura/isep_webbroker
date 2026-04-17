@@ -24,12 +24,7 @@ uses
 type
   TWebModule1 = class(TWebModule)
     DSHTTPWebDispatcher1: TDSHTTPWebDispatcher;
-    procedure WebModuleDefaultAction(
-      Sender: TObject;
-      Request: TWebRequest;
-      Response: TWebResponse;
-      var Handled: Boolean
-    );
+    procedure WebModuleDefaultAction(Sender: TObject; Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
   private
     function JsonInternalServerError(const AMessage: string): string;
   public
@@ -44,7 +39,11 @@ implementation
 
 uses
   AppRouter,
-  Web.WebReq;
+  Web.WebReq,
+  ArchetypeControllerPort,
+  ArchetypeServicePort,
+  ArchetypeController,
+  ArchetypeService;
 
 function TWebModule1.JsonInternalServerError(const AMessage: string): string;
 var
@@ -60,18 +59,17 @@ begin
   end;
 end;
 
-procedure TWebModule1.WebModuleDefaultAction(
-  Sender: TObject;
-  Request: TWebRequest;
-  Response: TWebResponse;
-  var Handled: Boolean
-);
+procedure TWebModule1.WebModuleDefaultAction(Sender: TObject; Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
 var
   Router: TAppRouter;
+  Service: IArchetypeService;
+  Controller: IArchetypeController;
   StatusCode: Integer;
   ContentType: string;
 begin
-  Router := TAppRouter.Create;
+  Service := TArchetypeService.Create;
+  Controller := TArchetypeController.Create(Service);
+  Router := TAppRouter.Create(Controller);
   try
     try
       Response.Content := Router.Route(Request, StatusCode, ContentType);
@@ -97,4 +95,3 @@ begin
 end;
 
 end.
-

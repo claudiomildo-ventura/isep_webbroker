@@ -4,16 +4,20 @@ program isep_webbroker;
 
 
 uses
-  Vcl.Forms, { Delphi VCL forms framework }
-  Web.WebReq, { WebBroker request handler }
-  IdHTTPWebBrokerBridge, { Indy HTTP bridge for WebBroker }
-  Startup in 'common\Startup.pas' {Startup1: TStartup}, { Main application form }
-  ServerContainer in 'common\ServerContainer.pas' {ServerContainer1: TServerContainer1},
-  AppRouter in 'adapters\in\web\Router\AppRouter.pas',
-  ArchetypeController in 'adapters\in\web\Controllers\ArchetypeController.pas', { Main controller for archetype logic }
-  GenerateSolutionUseCase in 'domain\usecases\GenerateSolutionUseCase.pas',
-  GenerateSolutionService in 'application\services\GenerateSolutionService.pas',
-  WebModule1 in 'adapters\in\web\WebModule\WebModule1.pas' {WebModule1: TWebModule1}; { Main web module for HTTP requests }
+  Vcl.Forms,
+  Web.WebReq,
+  IdHTTPWebBrokerBridge,
+  Startup in 'infrastructure\config\startup\Startup.pas' {Startup1: TStartup},
+  ServerContainer in 'infrastructure\config\server\ServerContainer.pas' {ServerContainer1: TServerContainer1},
+  AppRouter in 'infrastructure\config\router\AppRouter.pas',
+  ArchetypeController in 'adapter\in\archetype\Controllers\ArchetypeController.pas',
+  Archetype in 'domain\entities\Archetype.pas',
+  ArchetypeService in 'domain\service\ArchetypeService.pas',
+  WebModule1 in 'infrastructure\config\webmodule\WebModule1.pas' {WebModule1: TWebModule1},
+  ArchetypeControllerPort in 'port\output\ArchetypeControllerPort.pas',
+  ArchetypeServicePort in 'port\input\ArchetypeServicePort.pas';
+
+{ Main web module for HTTP requests }
 
 {$R *.res}
 

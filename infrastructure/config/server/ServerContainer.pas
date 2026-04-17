@@ -3,20 +3,20 @@ unit ServerContainer;
 interface
 
 uses System.SysUtils,
-     System.Classes,
-     Datasnap.DSServer,
-     Datasnap.DSCommonServer,
-     Datasnap.DSAuth;
+  System.Classes,
+  Datasnap.DSServer,
+  Datasnap.DSCommonServer,
+  Datasnap.DSAuth;
 
 type
   TServerContainer1 = class(TDataModule)
     DSServer1: TDSServer;
     DSServerClass1: TDSServerClass;
-    procedure DSServerClass1GetClass(DSServerClass: TDSServerClass;
-      var PersistentClass: TPersistentClass);
+    procedure DSServerClass1GetClass(DSServerClass: TDSServerClass; var PersistentClass: TPersistentClass);
   private
     { Private declarations }
   public
+    { Public declarations }
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
   end;
@@ -50,14 +50,17 @@ begin
   FDSServer := nil;
 end;
 
-procedure TServerContainer1.DSServerClass1GetClass(
-  DSServerClass: TDSServerClass; var PersistentClass: TPersistentClass);
+procedure TServerContainer1.DSServerClass1GetClass(DSServerClass: TDSServerClass; var PersistentClass: TPersistentClass);
 begin
   PersistentClass := TComponent;
 end;
 
 initialization
-  FModule := TServerContainer1.Create(nil);
+
+FModule := TServerContainer1.Create(nil);
+
 finalization
-  FModule.Free;
+
+FModule.Free;
+
 end.

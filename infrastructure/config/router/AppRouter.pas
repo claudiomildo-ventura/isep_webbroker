@@ -6,26 +6,34 @@ uses
   System.SysUtils,
   System.StrUtils,
   System.JSON,
-  Web.HTTPApp;
+  Web.HTTPApp,
+  ArchetypeControllerPort;
 
 type
   TAppRouter = class
   private
+    { Private declarations }
+    FController: IArchetypeController;
     function NormalizePath(const APath: string): string;
     function JsonError(const AMessage: string): string;
     function JsonMethodNotAllowed(const AAllowedMethod: string): string;
   public
-    function Route(
-      Request: TWebRequest;
-      out StatusCode: Integer;
-      out ContentType: string
-    ): string;
+    { Public declarations }
+    constructor Create(const AController: IArchetypeController);
+    function Route(Request: TWebRequest; out StatusCode: Integer; out ContentType: string): string;
   end;
 
 implementation
 
-uses
-  ArchetypeController;
+constructor TAppRouter.Create(const AController: IArchetypeController);
+begin
+  inherited Create;
+
+  if not Assigned(AController) then
+    raise Exception.Create('IArchetypeController not assigned');
+
+  FController := AController;
+end;
 
 function TAppRouter.NormalizePath(const APath: string): string;
 begin
@@ -65,13 +73,8 @@ begin
   end;
 end;
 
-function TAppRouter.Route(
-  Request: TWebRequest;
-  out StatusCode: Integer;
-  out ContentType: string
-): string;
+function TAppRouter.Route(Request: TWebRequest; out StatusCode: Integer; out ContentType: string): string;
 var
-  Controller: TArchetypeController;
   Path: string;
 begin
   ContentType := 'application/json; charset=utf-8';
@@ -86,14 +89,7 @@ begin
       Exit(JsonMethodNotAllowed('GET'));
     end;
 
-    Controller := TArchetypeController.Create;
-    try
-      Result := Controller.GenerateSolution;
-    finally
-      Controller.Free;
-    end;
-
-    Exit;
+    Exit(FController.GenerateSolution);
   end;
 
   StatusCode := 404;
@@ -101,4 +97,3 @@ begin
 end;
 
 end.
-
