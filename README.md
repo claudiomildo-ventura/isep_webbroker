@@ -29,9 +29,8 @@ Main example:
 
 - `isep_webbroker.dpr` / `isep_webbroker.dproj`: project entry and Delphi build configuration.
 - `common/`: startup and shared infrastructure modules.
-- `adapters/in/web/WebModule/`: WebBroker entry module.
-- `adapters/in/web/Router/`: HTTP route dispatching.
-- `adapters/in/web/Controllers/`: inbound web controllers.
+- `infrastructure/config/`: WebBroker entry module and route dispatching.
+- `adapter/in/web/Controllers/`: inbound web controllers.
 - `application/services/`: application service implementations.
 - `domain/usecases/`: use case contracts.
 
@@ -39,11 +38,11 @@ Only actively used units are kept in the project tree.
 
 ## Key Units
 
-- `common/Startup.pas`: GUI bootstrap used to start and stop the local HTTP server.
-- `common/ServerContainer.pas`: shared DataSnap server container module.
-- `adapters/in/web/WebModule/WebModule1.pas`: WebBroker module that handles incoming requests.
-- `adapters/in/web/Router/AppRouter.pas`: router responsible for route matching and HTTP status handling.
-- `adapters/in/web/Controllers/ArchetypeController.pas`: controller for the `/generate` endpoint.
+- `infrastructure/config/startup/Startup.pas`: GUI bootstrap used to start and stop the local HTTP server.
+- `infrastructure/config/server/ServerContainer.pas`: shared DataSnap server container module.
+- `infrastructure/config/webmodule/WebModule1.pas`: WebBroker module that handles incoming requests.
+- `infrastructure/config/router/AppRouter.pas`: router responsible for route matching and HTTP status handling.
+- `adapter/in/web/Controllers/ArchetypeController.pas`: controller for the `/generate` endpoint.
 - `domain/usecases/GenerateSolutionUseCase.pas`: use case interface definition.
 - `application/services/GenerateSolutionService.pas`: use case implementation returning JSON.
 

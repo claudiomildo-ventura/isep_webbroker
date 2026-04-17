@@ -7,14 +7,16 @@ uses
   Vcl.Forms,
   Web.WebReq,
   IdHTTPWebBrokerBridge,
-  Startup in 'common\Startup.pas' {Startup1: TStartup},
-  ServerContainer in 'common\ServerContainer.pas' {ServerContainer1: TServerContainer1},
-  AppRouter in 'adapters\in\web\Router\AppRouter.pas',
-  ArchetypeController in 'adapters\in\web\Controllers\ArchetypeController.pas',
+  Startup in 'infrastructure\config\startup\Startup.pas' {Startup1: TStartup},
+  ServerContainer in 'infrastructure\config\server\ServerContainer.pas' {ServerContainer1: TServerContainer1},
+  AppRouter in 'infrastructure\config\router\AppRouter.pas',
+  ArchetypeController in 'adapter\in\web\Controllers\ArchetypeController.pas',
+  Archetype in 'domain\entities\Archetype.pas',
   GenerateSolutionUseCase in 'domain\usecases\GenerateSolutionUseCase.pas',
   GenerateSolutionService in 'application\services\GenerateSolutionService.pas' {$R *.res},
-  WebModule1 in 'adapters\in\web\WebModule\WebModule1.pas' {WebModule1: TWebModule1},
-  IArchetypeController in 'adapters\in\web\Controllers\IArchetypeController.pas';
+  WebModule1 in 'infrastructure\config\webmodule\WebModule1.pas' {WebModule1: TWebModule1},
+  IArchetypeController in 'port\output\IArchetypeController.pas',
+  IArchetypeService in 'port\input\IArchetypeService.pas';
 
 { Main web module for HTTP requests }
 
