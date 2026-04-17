@@ -1,8 +1,6 @@
 program isep_webbroker;
 {$APPTYPE GUI}
 
-
-
 uses
   Vcl.Forms,
   Web.WebReq,
