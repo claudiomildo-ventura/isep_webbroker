@@ -7,7 +7,12 @@ uses
 
 type
   TGenerateSolutionService = class(TInterfacedObject, IGenerateSolutionUseCase)
+  private
+    { Private declarations }
+  protected
+    { Protected declarations }
   public
+    { Public declarations }
     constructor Create;
     destructor Destroy; override;
 
@@ -30,7 +35,7 @@ end;
 
 function TGenerateSolutionService.Execute: string;
 begin
-  Result := '{"message":"solution generated"}';
+  Result := '{ "message":"solution generated" }';
 end;
 
 end.

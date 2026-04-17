@@ -11,7 +11,7 @@
         <AppType>Application</AppType>
     </PropertyGroup>
     <PropertyGroup>
-        <DCC_UnitSearchPath>adapter\in\web\Controllers;domain\entities;port\input;port\output;infrastructure\config;infrastructure\config\router;infrastructure\config\webmodule;infrastructure\config\server;infrastructure\config\startup;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <DCC_UnitSearchPath>adapter\in\archetype\Controllers;domain\entities;port\input;port\output;infrastructure\config;infrastructure\config\router;infrastructure\config\webmodule;infrastructure\config\server;infrastructure\config\startup;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
         <Base>true</Base>
@@ -112,13 +112,14 @@ $(PostBuildEvent)]]></PostBuildEvent>
             <DesignClass>TServerContainer1</DesignClass>
         </DCCReference>
         <DCCReference Include="infrastructure\config\router\AppRouter.pas"/>
-        <DCCReference Include="adapter\in\web\Controllers\ArchetypeController.pas"/>
+        <DCCReference Include="adapter\in\archetype\Controllers\ArchetypeController.pas"/>
         <DCCReference Include="domain\entities\Archetype.pas"/>
-        <DCCReference Include="domain\usecases\GenerateSolutionUseCase.pas"/>
+        <DCCReference Include="domain\service\GenerateSolutionUseCase.pas"/>
         <DCCReference Include="application\services\GenerateSolutionService.pas">
             <Form>$R *.res</Form>
         </DCCReference>
         <DCCReference Include="port\input\IArchetypeService.pas"/>
+        <DCCReference Include="port\input\IGenerateSolutionUseCase.pas"/>
         <DCCReference Include="infrastructure\config\webmodule\WebModule1.pas">
             <Form>WebModule1</Form>
             <DesignClass>TWebModule1</DesignClass>

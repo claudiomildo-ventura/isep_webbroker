@@ -12,11 +12,13 @@ uses
 type
   TAppRouter = class
   private
+    { Private declarations }
     FUseCase: IGenerateSolutionUseCase;
     function NormalizePath(const APath: string): string;
     function JsonError(const AMessage: string): string;
     function JsonMethodNotAllowed(const AAllowedMethod: string): string;
   public
+    { Public declarations }
     constructor Create(const AUseCase: IGenerateSolutionUseCase);
     function Route(Request: TWebRequest; out StatusCode: Integer; out ContentType: string): string;
   end;

@@ -21,8 +21,10 @@ uses
   type
   TArchetypeController = class(TInterfacedObject, IArchetypeControllerSpecification)
   private
+    { Private declarations }
     FUseCase: IGenerateSolutionUseCase;
   public
+    { Public declarations }
     constructor Create(const AUseCase: IGenerateSolutionUseCase);
     function GenerateSolution: string;
   end;
@@ -31,7 +33,6 @@ implementation
 
 uses
   GenerateSolutionService;
-
 
 constructor TArchetypeController.Create(const AUseCase: IGenerateSolutionUseCase);
 begin
