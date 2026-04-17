@@ -7,27 +7,32 @@ uses
   System.Classes,
   System.JSON,
   Web.HTTPApp,
-  Datasnap.DSHTTPCommon,
-  Datasnap.DSHTTPWebBroker,
-  Datasnap.DSServer,
-  Web.WebFileDispatcher,
-  Web.HTTPProd,
-  Datasnap.DSAuth,
-  Datasnap.DSProxyJavaScript,
-  IPPeerServer,
-  Datasnap.DSMetadata,
-  Datasnap.DSServerMetadata,
-  Datasnap.DSClientMetadata,
-  Datasnap.DSCommonServer,
-  Datasnap.DSHTTP;
+  Datasnap.DSHTTPWebBroker, IPPeerServer, Datasnap.DSCommonServer, Datasnap.DSHTTP;
 
 type
+  /// <summary>
+  /// Main WebModule responsible for handling HTTP requests.
+  /// Acts as the entry point for routing requests to the application layer.
+  /// </summary>
   TWebModule1 = class(TWebModule)
     DSHTTPWebDispatcher1: TDSHTTPWebDispatcher;
-    procedure WebModuleDefaultAction(Sender: TObject; Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+
+    /// <summary>
+    /// Default request handler (acts as a front controller).
+    /// </summary>
+    procedure WebModuleDefaultAction(
+      Sender: TObject;
+      Request: TWebRequest;
+      Response: TWebResponse;
+      var Handled: Boolean
+    );
+
   private
+    /// <summary>
+    /// Generates a standardized JSON error response.
+    /// </summary>
     function JsonInternalServerError(const AMessage: string): string;
-  public
+
   end;
 
 var
@@ -39,7 +44,6 @@ implementation
 
 uses
   AppRouter,
-  Web.WebReq,
   ArchetypeControllerPort,
   ArchetypeServicePort,
   ArchetypeController,
@@ -51,7 +55,7 @@ var
 begin
   JsonObj := TJSONObject.Create;
   try
-    JsonObj.AddPair('error', 'internal server error');
+    JsonObj.AddPair('error', 'internal_server_error');
     JsonObj.AddPair('message', AMessage);
     Result := JsonObj.ToJSON;
   finally
@@ -59,7 +63,12 @@ begin
   end;
 end;
 
-procedure TWebModule1.WebModuleDefaultAction(Sender: TObject; Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+procedure TWebModule1.WebModuleDefaultAction(
+  Sender: TObject;
+  Request: TWebRequest;
+  Response: TWebResponse;
+  var Handled: Boolean
+);
 var
   Router: TAppRouter;
   Service: IArchetypeService;
@@ -67,10 +76,14 @@ var
   StatusCode: Integer;
   ContentType: string;
 begin
-  Service := TArchetypeService.Create;
-  Controller := TArchetypeController.Create(Service);
-  Router := TAppRouter.Create(Controller);
+  Handled := True;
+
   try
+    /// Dependency composition (manual DI)
+    Service := TArchetypeService.Create;
+    Controller := TArchetypeController.Create(Service);
+    Router := TAppRouter.Create(Controller);
+
     try
       Response.Content := Router.Route(Request, StatusCode, ContentType);
       Response.StatusCode := StatusCode;
@@ -79,18 +92,17 @@ begin
       if StatusCode = 405 then
         Response.SetCustomHeader('Allow', 'GET');
 
-    except
-      on E: Exception do
-      begin
-        Response.StatusCode := 500;
-        Response.ContentType := 'application/json; charset=utf-8';
-        Response.Content := JsonInternalServerError(E.Message);
-      end;
+    finally
+      Router.Free;
     end;
 
-    Handled := True;
-  finally
-    Router.Free;
+  except
+    on E: Exception do
+    begin
+      Response.StatusCode := 500;
+      Response.ContentType := 'application/json; charset=utf-8';
+      Response.Content := JsonInternalServerError(E.Message);
+    end;
   end;
 end;
 

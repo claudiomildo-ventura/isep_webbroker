@@ -1,8 +1,6 @@
 program isep_webbroker;
 {$APPTYPE GUI}
 
-
-
 uses
   Vcl.Forms,
   Web.WebReq,
@@ -10,7 +8,8 @@ uses
   Startup in 'infrastructure\config\startup\Startup.pas' {Startup1: TStartup},
   ServerContainer in 'infrastructure\config\server\ServerContainer.pas' {ServerContainer1: TServerContainer1},
   AppRouter in 'infrastructure\config\router\AppRouter.pas',
-  ArchetypeController in 'adapter\in\archetype\Controllers\ArchetypeController.pas',
+  ArchetypeController in 'adapter\in\archetype\controller\ArchetypeController.pas',
+  ArchetypeSolutionTableDto in 'adapter\in\archetype\dto\ArchetypeSolutionTableDto.pas',
   Archetype in 'domain\entities\Archetype.pas',
   ArchetypeService in 'domain\service\ArchetypeService.pas',
   WebModule1 in 'infrastructure\config\webmodule\WebModule1.pas' {WebModule1: TWebModule1},
