@@ -12,12 +12,10 @@ uses
   AppRouter in 'infrastructure\config\router\AppRouter.pas',
   ArchetypeController in 'adapter\in\archetype\Controllers\ArchetypeController.pas',
   Archetype in 'domain\entities\Archetype.pas',
-  GenerateSolutionUseCase in 'domain\service\GenerateSolutionUseCase.pas',
-  GenerateSolutionService in 'application\services\GenerateSolutionService.pas' {$R *.res},
+  ArchetypeService in 'domain\service\ArchetypeService.pas',
   WebModule1 in 'infrastructure\config\webmodule\WebModule1.pas' {WebModule1: TWebModule1},
-  IArchetypeController in 'port\output\IArchetypeController.pas',
-  IArchetypeService in 'port\input\IArchetypeService.pas',
-  IGenerateSolutionUseCase in 'port\input\IGenerateSolutionUseCase.pas';
+  ArchetypeControllerPort in 'port\output\ArchetypeControllerPort.pas',
+  ArchetypeServicePort in 'port\input\ArchetypeServicePort.pas';
 
 { Main web module for HTTP requests }
 

@@ -114,17 +114,13 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCCReference Include="infrastructure\config\router\AppRouter.pas"/>
         <DCCReference Include="adapter\in\archetype\Controllers\ArchetypeController.pas"/>
         <DCCReference Include="domain\entities\Archetype.pas"/>
-        <DCCReference Include="domain\service\GenerateSolutionUseCase.pas"/>
-        <DCCReference Include="application\services\GenerateSolutionService.pas">
-            <Form>$R *.res</Form>
-        </DCCReference>
-        <DCCReference Include="port\input\IArchetypeService.pas"/>
-        <DCCReference Include="port\input\IGenerateSolutionUseCase.pas"/>
+        <DCCReference Include="domain\service\ArchetypeService.pas"/>
+        <DCCReference Include="port\input\ArchetypeServicePort.pas"/>
         <DCCReference Include="infrastructure\config\webmodule\WebModule1.pas">
             <Form>WebModule1</Form>
             <DesignClass>TWebModule1</DesignClass>
         </DCCReference>
-        <DCCReference Include="port\output\IArchetypeController.pas"/>
+        <DCCReference Include="port\output\ArchetypeControllerPort.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

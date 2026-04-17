@@ -22,8 +22,8 @@ Main example:
 - `GET /generate` is handled by the WebModule.
 - The WebModule delegates routing to `TAppRouter`.
 - `TAppRouter` dispatches `/generate` to `TArchetypeController`.
-- `TArchetypeController` delegates to `IGenerateSolutionUseCase`.
-- `TGenerateSolutionService` returns the JSON response.
+- `TArchetypeController` delegates to `TIArchetypeService`.
+- `TArchetypeService` returns the archetype data as JSON.
 
 ## Project Structure
 
@@ -31,8 +31,8 @@ Main example:
 - `common/`: startup and shared infrastructure modules.
 - `infrastructure/config/`: WebBroker entry module and route dispatching.
 - `adapter/in/archetype/Controllers/`: inbound web controllers.
-- `application/services/`: application service implementations.
-- `domain/service/`: use case contracts.
+- `domain/service/`: service implementations.
+- `port/input/`: input contracts.
 
 Only actively used units are kept in the project tree.
 
@@ -43,8 +43,9 @@ Only actively used units are kept in the project tree.
 - `infrastructure/config/webmodule/WebModule1.pas`: WebBroker module that handles incoming requests.
 - `infrastructure/config/router/AppRouter.pas`: router responsible for route matching and HTTP status handling.
 - `adapter/in/archetype/Controllers/ArchetypeController.pas`: controller for the `/generate` endpoint.
-- `domain/service/GenerateSolutionUseCase.pas`: use case interface definition.
-- `application/services/GenerateSolutionService.pas`: use case implementation returning JSON.
+- `port/input/ArchetypeServicePort.pas`: archetype service contract.
+- `port/output/ArchetypeControllerPort.pas`: archetype controller contract.
+- `domain/service/ArchetypeService.pas`: archetype service implementation.
 
 ## Endpoint
 

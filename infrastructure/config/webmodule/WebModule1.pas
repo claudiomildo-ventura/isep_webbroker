@@ -40,7 +40,10 @@ implementation
 uses
   AppRouter,
   Web.WebReq,
-  GenerateSolutionService;
+  ArchetypeControllerPort,
+  ArchetypeServicePort,
+  ArchetypeController,
+  ArchetypeService;
 
 function TWebModule1.JsonInternalServerError(const AMessage: string): string;
 var
@@ -59,12 +62,14 @@ end;
 procedure TWebModule1.WebModuleDefaultAction(Sender: TObject; Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
 var
   Router: TAppRouter;
-  UseCase: TGenerateSolutionService;
+  Service: IArchetypeService;
+  Controller: IArchetypeController;
   StatusCode: Integer;
   ContentType: string;
 begin
-  UseCase := TGenerateSolutionService.Create;
-  Router := TAppRouter.Create(UseCase);
+  Service := TArchetypeService.Create;
+  Controller := TArchetypeController.Create(Service);
+  Router := TAppRouter.Create(Controller);
   try
     try
       Response.Content := Router.Route(Request, StatusCode, ContentType);

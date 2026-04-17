@@ -27,6 +27,7 @@ type
     { Public declarations }
     constructor Create(const AName: string);
     destructor Destroy; override;
+
     property AutoCreated: Boolean read FAutoCreated write FAutoCreated;
     property Architecture: Int64 read FArchitecture write FArchitecture;
     property DatabasePlatform: Int64 read FDatabasePlatform write FDatabasePlatform;
