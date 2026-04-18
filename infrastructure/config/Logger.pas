@@ -84,8 +84,7 @@ end;
 
 class procedure TLogger.Log(const ALevel, AComponent, AMessage: string);
 begin
-  WriteLn(Format('%s  %-5s %s --- [isep_webbroker] [        main] %-45s: %s',
-    [Timestamp, ALevel, ProcessID, AComponent, AMessage]));
+  WriteLn(Format('%s  %-5s %s --- [isep_webbroker] [        main] %-45s: %s', [Timestamp, ALevel, ProcessID, AComponent, AMessage]));
 end;
 
 class procedure TLogger.Info(const AComponent, AMessage: string);

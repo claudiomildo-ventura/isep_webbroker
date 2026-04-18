@@ -66,6 +66,11 @@
         <SyntaxMode Value="objfpc"/>
       </SyntaxOptions>
     </Parsing>
+    <Linking>
+      <Debugging>
+        <DebugInfoType Value="dsDwarf3"/>
+      </Debugging>
+    </Linking>
   </CompilerOptions>
   <Debugging>
     <Exceptions>

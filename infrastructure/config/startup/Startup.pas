@@ -26,22 +26,33 @@ procedure StartServer;
 
 implementation
 
+const
+  Port = 3003;
+
 procedure StartServer;
 begin
-  // Set the TCP port the server will bind to
-  Application.Port := 3003;
+  try
+    // Set the TCP port the server will bind to
+    Application.Port := Port;
 
-  // Allow requests to be dispatched to the default registered module
-  // when no specific module name is found in the URL path
-  Application.AllowDefaultModule := True;
+    // Allow requests to be dispatched to the default registered module.
+    // when no specific module name is found in the URL path.
+    Application.AllowDefaultModule := True;
 
-  TLogger.Info('i.c.isep.Startup', 'Starting ISEP WebBroker application');
-  Application.Initialize;
-  TLogger.Info('i.c.isep.Startup', 'Server started on port ' + IntToStr(Application.Port));
-  TLogger.Info('i.c.isep.Startup', 'Listening on http://localhost:' + IntToStr(Application.Port) + '/generate');
+    TLogger.Info('i.c.isep.Startup', 'Starting ISEP WebBroker application');
+    Application.Initialize;
+    TLogger.Info('i.c.isep.Startup', Format('Server started on port %d', [Application.Port]));
+    TLogger.Info('i.c.isep.Startup', Format('Listening on http://localhost: %d /generate', [Application.Port]));
 
-  // Enter the server event loop — blocks until process is terminated
-  Application.Run;
+    // Enter the server event loop — blocks until process is terminated.
+    Application.Run;
+  except
+    on E: Exception do
+    begin
+      TLogger.Error('i.c.isep.Startup', Format('Error starting server: %s', [E.Message]));
+      raise; // Re-raises the exception to keep it visible during debugging.
+    end;
+  end;
 end;
 
 end.
