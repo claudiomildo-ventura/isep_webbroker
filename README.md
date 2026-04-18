@@ -31,6 +31,7 @@ Main example:
 - `common/`: startup and shared infrastructure modules.
 - `infrastructure/config/`: WebBroker entry module and route dispatching.
 - `adapter/in/archetype/controller/`: inbound web controllers.
+- `adapter/in/archetype/dto/`: DTOs (data transfer objects) for controller responses.
 - `domain/service/`: service implementations.
 - `port/input/`: input contracts.
 
@@ -46,6 +47,7 @@ Only actively used units are kept in the project tree.
 - `port/input/ArchetypeServicePort.pas`: archetype service contract.
 - `port/output/ArchetypeControllerPort.pas`: archetype controller contract.
 - `domain/service/ArchetypeService.pas`: archetype service implementation.
+- `infrastructure/config/httputils/HttpResponse.pas`: HTTP response wrapper class for status, content type, and JSON body.
 
 ## Endpoint
 
