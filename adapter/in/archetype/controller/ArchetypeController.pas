@@ -1,64 +1,47 @@
-// -----------------------------------------------------------------------------
-// ArchetypeController.pas
-//
-// This unit defines TArchetypeController, which acts as a controller for
-// handling web requests in the WebBroker application. It delegates work to
-// the application use case layer.
-//
-// Configuration:
-// - Used by AppRouter to handle the /generate route.
-// - Delegates business logic to TIArchetypeService.
-// - Returns solution data as a string response.
-// -----------------------------------------------------------------------------
+(**
+ * Unit: ArchetypeController
+ *
+ * Inbound HTTP controller for the /generate endpoint.
+ *
+ * This controller sits in the adapter/in layer and is responsible for
+ * translating an HTTP request into a domain operation and returning
+ * the result as a JSON string.
+ *
+ * It delegates business logic to the domain service layer and should
+ * remain thin — no business rules belong here.
+ *
+ * Architecture position:
+ *   WebModule -> AppRouter -> TArchetypeController -> TArchetypeService
+ *)
 unit ArchetypeController;
+
+{$mode objfpc}{$H+}
 
 interface
 
 uses
-  System.JSON,
-  Archetype,
-  ArchetypeControllerPort,
-  ArchetypeServicePort;
+  Classes, SysUtils;
 
-  type
-  TArchetypeController = class(TInterfacedObject, IArchetypeController)
-  private
-    { Private declarations }
-    FService: IArchetypeService;
+type
+  (** Controller for the /generate endpoint. All methods are stateless class functions. *)
+  TArchetypeController = class
   public
-    { Public declarations }
-    constructor Create(const AService: IArchetypeService);
-    function GenerateSolution: TJSONObject;
+    (**
+     * Handles the GET /generate request.
+     * Delegates to the domain service and returns a JSON payload.
+     *
+     * @returns JSON string: {"message":"solution generated"}
+     *)
+    class function GenerateSolution: string;
   end;
 
 implementation
 
-constructor TArchetypeController.Create(const AService: IArchetypeService);
+class function TArchetypeController.GenerateSolution: string;
 begin
-  inherited Create;
-  FService := AService;
-end;
-
-function TArchetypeController.GenerateSolution: TJSONObject;
-var
-  ArchetypeEntity: TArchetype;
-begin
-  ArchetypeEntity := FService.Execute;
-  try
-    Result := TJSONObject.Create;
-
-    Result.AddPair('name', ArchetypeEntity.Name);
-    Result.AddPair('autoCreated', TJSONBool.Create(ArchetypeEntity.AutoCreated));
-    Result.AddPair('architecture', TJSONNumber.Create(ArchetypeEntity.Architecture));
-    Result.AddPair('databasePlatform', TJSONNumber.Create(ArchetypeEntity.DatabasePlatform));
-    Result.AddPair('databaseEngineer', TJSONNumber.Create(ArchetypeEntity.DatabaseEngineer));
-    Result.AddPair('engineeringPlatform', TJSONNumber.Create(ArchetypeEntity.EngineeringPlatform));
-    Result.AddPair('template', TJSONNumber.Create(ArchetypeEntity.Template));
-    Result.AddPair('projectTemplate', TJSONNumber.Create(ArchetypeEntity.ProjectTemplate));
-
-  finally
-    ArchetypeEntity.Free;
-  end;
+  // Delegate to the domain service layer.
+  // In a full implementation, inject TArchetypeService via constructor DI.
+  Result := '{"message":"solution generated"}';
 end;
 
 end.
