@@ -12,7 +12,7 @@ type
   /// Encapsulates architectural, database, and platform-related settings,
   /// along with associated table definitions.
   /// </summary>
-  TArchetype = class
+  TArchetype = class(TObject)
   private
     FName: string;
     FAutoCreated: Boolean;

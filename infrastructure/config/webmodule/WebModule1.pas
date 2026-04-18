@@ -44,6 +44,7 @@ implementation
 
 uses
   AppRouter,
+  HttpResponse,
   ArchetypeControllerPort,
   ArchetypeServicePort,
   ArchetypeController,
@@ -51,15 +52,15 @@ uses
 
 function TWebModule1.JsonInternalServerError(const AMessage: string): string;
 var
-  JsonObj: TJSONObject;
+  J: TJSONObject;
 begin
-  JsonObj := TJSONObject.Create;
+  J := TJSONObject.Create;
   try
-    JsonObj.AddPair('error', 'internal_server_error');
-    JsonObj.AddPair('message', AMessage);
-    Result := JsonObj.ToJSON;
+    J.AddPair('error', 'internal_server_error');
+    J.AddPair('message', AMessage);
+    Result := J.ToJSON;
   finally
-    JsonObj.Free;
+    J.Free;
   end;
 end;
 
@@ -70,30 +71,36 @@ procedure TWebModule1.WebModuleDefaultAction(
   var Handled: Boolean
 );
 var
-  Router: TAppRouter;
-  Service: IArchetypeService;
-  Controller: IArchetypeController;
-  StatusCode: Integer;
-  ContentType: string;
+  Resp: THttpResponse;
+  AppRouter: TAppRouter;
+  ArchetypeService: IArchetypeService;
+  ArchetypeController: IArchetypeController;
 begin
   Handled := True;
 
   try
-    /// Dependency composition (manual DI)
-    Service := TArchetypeService.Create;
-    Controller := TArchetypeController.Create(Service);
-    Router := TAppRouter.Create(Controller);
+    /// Composition root (OK aqui)
+    ArchetypeService := TArchetypeService.Create;
+    ArchetypeController := TArchetypeController.Create(ArchetypeService);
+    AppRouter := TAppRouter.Create(ArchetypeController);
 
     try
-      Response.Content := Router.Route(Request, StatusCode, ContentType);
-      Response.StatusCode := StatusCode;
-      Response.ContentType := ContentType;
+      Resp := AppRouter.Redirect(Request);
+      try
+        Response.StatusCode := Resp.StatusCode;
+        Response.ContentType := Resp.ContentType;
 
-      if StatusCode = 405 then
-        Response.SetCustomHeader('Allow', 'GET');
+        if Assigned(Resp.Body) then
+          Response.Content := Resp.Body.ToJSON
+        else
+          Response.Content := '';
+
+      finally
+        Resp.Free;
+      end;
 
     finally
-      Router.Free;
+      AppRouter.Free;
     end;
 
   except
@@ -101,7 +108,11 @@ begin
     begin
       Response.StatusCode := 500;
       Response.ContentType := 'application/json; charset=utf-8';
-      Response.Content := JsonInternalServerError(E.Message);
+      Response.Content :=
+        TJSONObject.Create
+          .AddPair('error', 'internal_server_error')
+          .AddPair('message', E.Message)
+          .ToJSON;
     end;
   end;
 end;

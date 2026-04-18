@@ -2,6 +2,8 @@ unit ArchetypeControllerPort;
 
 interface
 
+uses System.JSON;
+
 type
   /// <summary>
   /// Defines the contract for an Archetype Controller.
@@ -19,7 +21,7 @@ type
     /// <returns>
     /// A string representing the generated solution.
     /// </returns>
-    function GenerateSolution: string;
+    function GenerateSolution: TJSONObject;
 
   end;
 

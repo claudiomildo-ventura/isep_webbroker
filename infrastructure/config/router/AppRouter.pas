@@ -7,20 +7,22 @@ uses
   System.StrUtils,
   System.JSON,
   Web.HTTPApp,
-  ArchetypeControllerPort;
+  ArchetypeControllerPort,
+  HttpResponse;
 
 type
   TAppRouter = class
   private
-    { Private declarations }
     FController: IArchetypeController;
+
     function NormalizePath(const APath: string): string;
-    function JsonError(const AMessage: string): string;
-    function JsonMethodNotAllowed(const AAllowedMethod: string): string;
+    function JsonError(const AMessage: string): TJSONObject;
+    function JsonMethodNotAllowed(const AAllowedMethod: string): TJSONObject;
+
   public
-    { Public declarations }
     constructor Create(const AController: IArchetypeController);
-    function Route(Request: TWebRequest; out StatusCode: Integer; out ContentType: string): string;
+
+    function Redirect(Request: TWebRequest): THttpResponse;
   end;
 
 implementation
@@ -46,54 +48,44 @@ begin
     Result := Result.Substring(0, Result.Length - 1);
 end;
 
-function TAppRouter.JsonError(const AMessage: string): string;
-var
-  JsonObj: TJSONObject;
+function TAppRouter.JsonError(const AMessage: string): TJSONObject;
 begin
-  JsonObj := TJSONObject.Create;
-  try
-    JsonObj.AddPair('error', AMessage);
-    Result := JsonObj.ToJSON;
-  finally
-    JsonObj.Free;
-  end;
+  Result := TJSONObject.Create;
+  Result.AddPair('error', AMessage);
 end;
 
-function TAppRouter.JsonMethodNotAllowed(const AAllowedMethod: string): string;
-var
-  JsonObj: TJSONObject;
+function TAppRouter.JsonMethodNotAllowed(const AAllowedMethod: string): TJSONObject;
 begin
-  JsonObj := TJSONObject.Create;
-  try
-    JsonObj.AddPair('error', 'method not allowed');
-    JsonObj.AddPair('allowed', AAllowedMethod);
-    Result := JsonObj.ToJSON;
-  finally
-    JsonObj.Free;
-  end;
+  Result := TJSONObject.Create;
+  Result.AddPair('error', 'method not allowed');
+  Result.AddPair('allowed', AAllowedMethod);
 end;
 
-function TAppRouter.Route(Request: TWebRequest; out StatusCode: Integer; out ContentType: string): string;
+function TAppRouter.Redirect(Request: TWebRequest): THttpResponse;
 var
   Path: string;
 begin
-  ContentType := 'application/json; charset=utf-8';
-  StatusCode := 200;
+  Result := THttpResponse.Create;
+  Result.ContentType := 'application/json; charset=utf-8';
+  Result.StatusCode := 200;
+
   Path := NormalizePath(Request.PathInfo);
 
   if SameText(Path, '/generate') then
   begin
     if not SameText(Request.Method, 'GET') then
     begin
-      StatusCode := 405;
-      Exit(JsonMethodNotAllowed('GET'));
+      Result.StatusCode := 405;
+      Result.Body := JsonMethodNotAllowed('GET');
+      Exit;
     end;
 
-    Exit(FController.GenerateSolution);
+    Result.Body := FController.GenerateSolution;
+    Exit;
   end;
 
-  StatusCode := 404;
-  Result := JsonError('route not found');
+  Result.StatusCode := 404;
+  Result.Body := JsonError('route not found');
 end;
 
 end.
