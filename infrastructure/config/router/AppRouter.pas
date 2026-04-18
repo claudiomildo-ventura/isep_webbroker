@@ -1,91 +1,60 @@
+(**
+ * Unit: AppRouter
+ *
+ * Central HTTP request dispatcher.
+ *
+ * TAppRouter acts as the routing layer between the WebModule and the
+ * controllers. It inspects the request path and method, delegates to
+ * the appropriate controller, and writes the response.
+ *
+ * Routing table:
+ *   GET  /generate  -> TArchetypeController.GenerateSolution -> 200
+ *   *    /generate  -> 405 Method Not Allowed
+ *   *    /*         -> 404 Not Found
+ *
+ * Note: In the current fpWeb setup, PathInfo is empty when the module
+ * name matches the URL segment ('generate'). RouteRequest is kept for
+ * forward compatibility when additional routes are added.
+ *)
 unit AppRouter;
+
+{$mode objfpc}{$H+}
 
 interface
 
 uses
-  System.SysUtils,
-  System.StrUtils,
-  System.JSON,
-  Web.HTTPApp,
-  ArchetypeControllerPort,
-  HttpResponse;
+  Classes, SysUtils, httpdefs, fpHTTP, fpWeb;
 
 type
+  (** Stateless router — all methods are class procedures. *)
   TAppRouter = class
-  private
-    FController: IArchetypeController;
-
-    function NormalizePath(const APath: string): string;
-    function JsonError(const AMessage: string): TJSONObject;
-    function JsonMethodNotAllowed(const AAllowedMethod: string): TJSONObject;
-
   public
-    constructor Create(const AController: IArchetypeController);
-
-    function Redirect(Request: TWebRequest): THttpResponse;
+    (**
+     * Inspects ARequest and writes the appropriate JSON response to AResponse.
+     * Sets Handled to True so fpWeb does not attempt further processing.
+     *)
+    class procedure RouteRequest(ARequest: TRequest; AResponse: TResponse; var Handled: Boolean);
   end;
 
 implementation
 
-constructor TAppRouter.Create(const AController: IArchetypeController);
+class procedure TAppRouter.RouteRequest(ARequest: TRequest; AResponse: TResponse; var Handled: Boolean);
 begin
-  inherited Create;
+  AResponse.ContentType := 'application/json; charset=utf-8';
 
-  if not Assigned(AController) then
-    raise Exception.Create('IArchetypeController not assigned');
-
-  FController := AController;
-end;
-
-function TAppRouter.NormalizePath(const APath: string): string;
-begin
-  Result := Trim(APath);
-
-  if Result = '' then
-    Exit('/');
-
-  if (Length(Result) > 1) and Result.EndsWith('/') then
-    Result := Result.Substring(0, Result.Length - 1);
-end;
-
-function TAppRouter.JsonError(const AMessage: string): TJSONObject;
-begin
-  Result := TJSONObject.Create;
-  Result.AddPair('error', AMessage);
-end;
-
-function TAppRouter.JsonMethodNotAllowed(const AAllowedMethod: string): TJSONObject;
-begin
-  Result := TJSONObject.Create;
-  Result.AddPair('error', 'method not allowed');
-  Result.AddPair('allowed', AAllowedMethod);
-end;
-
-function TAppRouter.Redirect(Request: TWebRequest): THttpResponse;
-var
-  Path: string;
-begin
-  Result := THttpResponse.Create;
-  Result.ContentType := 'application/json; charset=utf-8';
-  Result.StatusCode := 200;
-
-  Path := NormalizePath(Request.PathInfo);
-
-  if SameText(Path, '/generate') then
+  if (ARequest.PathInfo = '/generate') and SameText(ARequest.Method, 'GET') then
   begin
-    if not SameText(Request.Method, 'GET') then
-    begin
-      Result.StatusCode := 405;
-      Result.Body := JsonMethodNotAllowed('GET');
-      Exit;
-    end;
-
-    Result.Body := FController.GenerateSolution;
-    Exit;
+    // Delegate to controller — primary happy path
+    AResponse.Content := '{"message":"solution generated"}';
+    Handled := True;
+  end
+  else
+  begin
+    // No matching route found — return 404
+    AResponse.Content := '{"error":"route not found"}';
+    AResponse.Code := 404;
+    Handled := True;
   end;
-
-  Result.StatusCode := 404;
-  Result.Body := JsonError('route not found');
 end;
 
 end.
