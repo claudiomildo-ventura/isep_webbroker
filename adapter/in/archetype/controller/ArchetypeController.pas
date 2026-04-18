@@ -20,7 +20,8 @@ unit ArchetypeController;
 interface
 
 uses
-  Classes, SysUtils;
+  Classes,
+  SysUtils;
 
 type
   (** Controller for the /generate endpoint. All methods are stateless class functions. *)
