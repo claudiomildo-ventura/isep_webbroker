@@ -18,7 +18,9 @@ unit Startup;
 interface
 
 uses
-  Classes, SysUtils, fphttpapp,
+  Classes,
+  SysUtils,
+  fphttpapp,
   Logger;
 
 (** Configures and starts the embedded HTTP server. Blocks until shutdown. *)
@@ -56,3 +58,4 @@ begin
 end;
 
 end.
+

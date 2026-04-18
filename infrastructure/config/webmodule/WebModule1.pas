@@ -21,8 +21,14 @@ unit WebModule1;
 interface
 
 uses
-  Classes, SysUtils, httpdefs, fpHTTP, fpWeb,
-  AppRouter, ArchetypeController, Logger;
+  Classes,
+  SysUtils,
+  httpdefs,
+  fpHTTP,
+  fpWeb,
+  AppRouter,
+  Logger,
+  ArchetypeController;
 
 type
   (** fpWeb web module that handles all HTTP requests for the /generate endpoint. *)

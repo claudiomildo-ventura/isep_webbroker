@@ -23,11 +23,15 @@ unit AppRouter;
 interface
 
 uses
-  Classes, SysUtils, httpdefs, fpHTTP, fpWeb;
+  Classes,
+  SysUtils,
+  httpdefs,
+  fpHTTP,
+  fpWeb;
 
 type
   (** Stateless router — all methods are class procedures. *)
-  TAppRouter = class
+  TAppRouter = class(TObject)
   public
     (**
      * Inspects ARequest and writes the appropriate JSON response to AResponse.
@@ -58,3 +62,4 @@ begin
 end;
 
 end.
+
