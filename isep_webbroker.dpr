@@ -14,7 +14,8 @@ uses
   ArchetypeService in 'domain\service\ArchetypeService.pas',
   WebModule1 in 'infrastructure\config\webmodule\WebModule1.pas' {WebModule1: TWebModule1},
   ArchetypeControllerPort in 'port\output\ArchetypeControllerPort.pas',
-  ArchetypeServicePort in 'port\input\ArchetypeServicePort.pas';
+  ArchetypeServicePort in 'port\input\ArchetypeServicePort.pas',
+  HttpResponse in 'infrastructure\config\httputils\HttpResponse.pas';
 
 { Main web module for HTTP requests }
 

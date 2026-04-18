@@ -28,7 +28,7 @@ uses
   public
     { Public declarations }
     constructor Create(const AService: IArchetypeService);
-    function GenerateSolution: string;
+    function GenerateSolution: TJSONObject;
   end;
 
 implementation
@@ -39,25 +39,24 @@ begin
   FService := AService;
 end;
 
-function TArchetypeController.GenerateSolution: string;
+function TArchetypeController.GenerateSolution: TJSONObject;
 var
   ArchetypeEntity: TArchetype;
-  JsonObj: TJSONObject;
 begin
   ArchetypeEntity := FService.Execute;
-  JsonObj := TJSONObject.Create;
   try
-    JsonObj.AddPair('name', ArchetypeEntity.Name);
-    JsonObj.AddPair('autoCreated', TJSONBool.Create(ArchetypeEntity.AutoCreated));
-    JsonObj.AddPair('architecture', TJSONNumber.Create(ArchetypeEntity.Architecture));
-    JsonObj.AddPair('databasePlatform', TJSONNumber.Create(ArchetypeEntity.DatabasePlatform));
-    JsonObj.AddPair('databaseEngineer', TJSONNumber.Create(ArchetypeEntity.DatabaseEngineer));
-    JsonObj.AddPair('engineeringPlatform', TJSONNumber.Create(ArchetypeEntity.EngineeringPlatform));
-    JsonObj.AddPair('template', TJSONNumber.Create(ArchetypeEntity.Template));
-    JsonObj.AddPair('projectTemplate', TJSONNumber.Create(ArchetypeEntity.ProjectTemplate));
-    Result := JsonObj.ToJSON;
+    Result := TJSONObject.Create;
+
+    Result.AddPair('name', ArchetypeEntity.Name);
+    Result.AddPair('autoCreated', TJSONBool.Create(ArchetypeEntity.AutoCreated));
+    Result.AddPair('architecture', TJSONNumber.Create(ArchetypeEntity.Architecture));
+    Result.AddPair('databasePlatform', TJSONNumber.Create(ArchetypeEntity.DatabasePlatform));
+    Result.AddPair('databaseEngineer', TJSONNumber.Create(ArchetypeEntity.DatabaseEngineer));
+    Result.AddPair('engineeringPlatform', TJSONNumber.Create(ArchetypeEntity.EngineeringPlatform));
+    Result.AddPair('template', TJSONNumber.Create(ArchetypeEntity.Template));
+    Result.AddPair('projectTemplate', TJSONNumber.Create(ArchetypeEntity.ProjectTemplate));
+
   finally
-    JsonObj.Free;
     ArchetypeEntity.Free;
   end;
 end;
